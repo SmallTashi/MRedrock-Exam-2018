@@ -437,7 +437,7 @@ Content-Type: application/x-www-form-urlencoded
 #### header
 ```http
 POST  https://wx.idsbllp.cn/springtest/cyxbsMobile/index.php/QA/Answer/uploadPicture
-Content-Type: application/x-www-form-urlencoded
+Content-Type: multipart/form-data
 ```
 
 #### request-body
