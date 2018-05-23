@@ -459,3 +459,170 @@ Content-Type: multipart/form-data
     ]
 }
 ```
+
+## 四、课表部分
+### 1. 个人课表查询
+#### header
+```http
+POST  https://wx.idsbllp.cn/api/kebiao
+Content-Type: Content-Type: application/x-www-form-urlencoded
+```
+
+#### request-body
+| key | value | description |
+| --- | ----- | ----------- |
+| stu_num | 201621xxxx | 用户学号 |
+| forceFetch | true or false | 可选参数，值为true时强制从教务在线拉取课表（数据较慢），false时从服务器拉取课表缓存数据 |
+
+#### response-body
+```json
+{
+    "status": 200,
+    "version": "16.9.4",
+    "term": "2017-2018学年第2学期",
+    "stuNum": "2016210xxx",
+    "cachedTimestamp": 1527003165462,
+    "outOfDateTimestamp": 1527607965462,
+    "data": [
+        {
+            "hash_day": 0,      //day的数值表示
+            "hash_lesson": 0,   //lesson的数值表示
+            "begin_lesson": 1,
+            "day": "星期一",
+            "lesson": "一二节",
+            "course": "通信软件开发与应用(1)",
+            "teacher": "罗文丰",
+            "classroom": "4403",
+            "rawWeek": "1-16周",
+            "weekModel": "all", //all, single(单周) or double（双周）
+            "weekBegin": 1,
+            "weekEnd": 16,
+            "type": "必修",
+            "period": 2,
+            "_id": "5b04381de0800855200fd7fb",
+            "week": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        }
+    ],
+    "nowWeek": 12
+}
+```
+
+### 2. 获取备忘
+#### header
+```http
+POST  https://wx.idsbllp.cn/cyxbsMobile/index.php/Home/Person/getTransaction
+Content-Type: Content-Type: application/x-www-form-urlencoded
+```
+
+#### request-body
+| key | value | description |
+| --- | ----- | ----------- |
+| stuNum | 201621xxxx | 用户学号 |
+| idNum | 1xxxxx | 用户身份证后6位 |
+
+#### response-body
+```json
+{
+    "status": 200,
+    "info": "success",
+    "state": 200,
+    "term": 201720182,
+    "stuNum": "2016210xxx",
+    "data": [
+        {
+            "id": 15270450378678627,
+            "time": 5,  //remind time
+            "title": "this is a title",
+            "content": "this is a content",
+            "updated_time": "2018-05-23 11:10:38",
+            "date": [
+                {
+                    "class": 0, //1、2节
+                    "day": 5,   //周六
+                    "week": [
+                        12
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+### 3. 添加备忘
+#### header
+```http
+POST  https://wx.idsbllp.cn/cyxbsMobile/index.php/Home/Person/addTransaction
+Content-Type: Content-Type: application/x-www-form-urlencoded
+```
+
+#### request-body
+| key | value | description |
+| --- | ----- | ----------- |
+| stuNum | 201621xxxx | 用户学号 |
+| idNum | 1xxxxx | 用户身份证后6位 |
+| time | 5 | 提前几分钟提醒 |
+| title | title | 标题 |
+| content | content | 内容 |
+| id | 15270450378678628 | 备忘的唯一标识，生成规则：`System.currentTimeMillis() + "" + (new Random().nextInt(9999 - 1000 + 1) + 1000)` |
+| date | `[{"day":1,"week":1,"class":"1"},{"day":1,"week":"1,2","class":"2"}]` | 参照获取备忘接口的date字段 |
+
+#### response-body
+```json
+{
+    "status": 200,
+    "info": "success",
+    "state": 200,
+    "id": 15270450378678628
+}
+```
+
+### 3. 编辑备忘
+#### header
+```http
+POST  https://wx.idsbllp.cn/cyxbsMobile/index.php/Home/Person/addTransaction
+Content-Type: Content-Type: application/x-www-form-urlencoded
+```
+
+#### request-body
+| key | value | description |
+| --- | ----- | ----------- |
+| stuNum | 201621xxxx | 用户学号 |
+| idNum | 1xxxxx | 用户身份证后6位 |
+| time | 5 | 提前几分钟提醒 |
+| title | title | 标题 |
+| content | content | 内容 |
+| id | 15270450378678628 | 需要修改的备忘id |
+| date | `[{"day":1,"week":1,"class":"1"},{"day":1,"week":"1,2","class":"2"}]` | 参照获取备忘接口的date字段 |
+
+#### response-body
+```json
+{
+    "status": 200,
+    "info": "success",
+    "state": 200
+}
+```
+
+### 4. 删除备忘
+#### header
+```http
+POST  https://wx.idsbllp.cn/cyxbsMobile/index.php/Home/Person/deleteTransaction
+Content-Type: Content-Type: application/x-www-form-urlencoded
+```
+
+#### request-body
+| key | value | description |
+| --- | ----- | ----------- |
+| stuNum | 201621xxxx | 用户学号 |
+| idNum | 1xxxxx | 用户身份证后6位 |
+| id | 15270450378678628 | 需要删除的备忘id |
+
+#### response-body
+```json
+{
+    "status": 200,
+    "info": "success",
+    "state": 200
+}
+```
